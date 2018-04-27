@@ -1,5 +1,13 @@
 # Projekt: Davis zu GSM Gateway
 
+In diesem Projekt entwickle ich für unseren Surfverein (http://www.lsvsw-surfen.de/) eine Schaltung+Software, welche die Wetterdaten der Davis-Wetterstation empfängt, decodiert und via GSM an einen Server schickt, der die Auswertung auf unserer Webseite darstellt.
+
+Ziele:
+* Zuverlässige integrierte Schaltung
+* Betrieb an einer Autobatterie (11-13V)
+* Niedriger Stromverbrauch für Solarbetrieb (~0,5 Watt)
+* Preiswert nachzubauen
+
 ## Hardware
 
 ### Spannungswandler
