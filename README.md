@@ -51,3 +51,11 @@ Zusätzlich muss am ANT eine passende Antenne angeschlossen werden (17,3 cm Klin
 
 * Mittels der Diode wird die Spannung auf ~4V reduziert, dies dient als Eingangsspannung für das GSM-Modul
 
+# Software
+
+Voraussetzung ist eine Arduino-IDE mit den Treibern und Libs für das STM32-Board (STM32duino-Projekt, https://github.com/stm32duino/Arduino_Core_STM32)
+
+## Bibliotheken
+
+* Davis Decoder-Bibliothek https://github.com/dekay/DavisRFM69
+
