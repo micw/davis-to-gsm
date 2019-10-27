@@ -198,10 +198,35 @@ class CustomHttpRequestHandler(PathBoundHttpRequestHandler):
 		url=urlparse(self.path)
 		if url.path=='/publish':
 			self.handle_publish(parse_qs(url.query))
+		elif url.path=='/metrics':
+			self.print_metrics()
 		elif url.path=='/':
 			self.print_status()
 		else:
 			PathBoundHttpRequestHandler.do_GET(self)
+
+	def print_metrics(self):
+		start=datetime.now()
+		end=start-timedelta(minutes=120)
+
+		data={}
+		data['surfdata_wind_min']=self.server.get_value('wma',end,start,agg_min);
+		data['surfdata_wind_avg']=self.server.get_value('wav',end,start,agg_max);
+		data['surfdata_wind_max']=self.server.get_value('wav',end,start,agg_max);
+		data['surfdata_wind_dir']=self.server.get_value('wd',end,start,agg_last);
+		data['surfdata_t_luft']=self.server.get_value('t',end,start,agg_max);
+		data['surfdata_h_luft']=self.server.get_value('h',end,start,agg_max);
+		data['surfdata_t_wasser']=self.server.get_value('xt',end,start,agg_max);
+		data['v_capacitor']=self.server.get_value('vc',end,start,agg_last);
+		data['v_battery']=self.server.get_value('xv',end,start,agg_last);
+		data['sun']=self.server.get_value('vs',end,start,agg_last);
+
+		text=""
+		for (k,v) in data.items():
+			if v is not None:
+				text+="%s %s\n"%(k,v)
+
+		self.send_text_response(text,content_type="text/plain")
 
 	def print_status(self):
 
@@ -254,25 +279,6 @@ class CustomHttpRequestHandler(PathBoundHttpRequestHandler):
 
 		self.send_text_response(html)
 		return
-
-
-		now=datetime.now()
-		html='<html>'
-		html+='<body>'
-		html+='<h1>Latest sensor data</h1>'
-		html+='<table border=1>'
-		for (k,v) in self.server.sensordata.iteritems():
-			html+='<tr>'
-			html+='<td width=50>%s</td>'%k
-			html+='<td width=250>%s</td>'%v['l']
-			html+='<td width=150><span style="display: block; width:75px; float: left; text-align:right">%s</span>&#160;%s</td>'%(v['v'],v['u'])
-			html+='<td width=200 align=center>%s</td>'%v['t'].strftime('%d.%m.%Y %H:%M:%S')
-			html+='<td width=200 align=center>age: %s</td>'%(now-v['t'])
-			html+='</tr>'
-		html+='</table>'
-		html+='</body>'
-		html+='</html>'
-		self.send_text_response(html);
 
 	def handle_publish(self,params):
 		if not self.check_apikey(params):
@@ -328,7 +334,7 @@ class CustomHttpRequestHandler(PathBoundHttpRequestHandler):
 		if 't' in params:
 			values['t']=float(params['t'][0])
 			# Temperature outside - °C
-			self.server.sensordata['wg']={
+			self.server.sensordata['t']={
 				't':now,
 				'v':params['t'][0],
 				'l':'Temperature outside',
@@ -373,7 +379,7 @@ class CustomHttpRequestHandler(PathBoundHttpRequestHandler):
 		if 'xt' in params:
 			values['xt']=float(params['xt'][0])
 			# External Sensor Temperature - °C
-			self.server.sensordata['vs']={
+			self.server.sensordata['xt']={
 				't':now,
 				'v':params['xt'][0],
 				'l':'External Sensor Temperature',
@@ -401,13 +407,13 @@ class CustomHttpRequestHandler(PathBoundHttpRequestHandler):
 		self.send_text_response('api_key not accepted\n',403)
 		return False
 
-	def send_text_response(self,text,status=200):
+	def send_text_response(self,text,status=200,content_type="text/html;charset=utf-8"):
 		try:
 			text=text.encode()
 		except:
 			pass
 		self.send_response(status)
-		self.send_header("Content-type", "text/html;charset=utf-8")
+		self.send_header("Content-type", content_type)
 		self.send_header("Content-length", len(text))
 		self.end_headers()
 		self.wfile.write(text)
