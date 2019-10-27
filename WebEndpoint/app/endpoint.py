@@ -207,7 +207,7 @@ class CustomHttpRequestHandler(PathBoundHttpRequestHandler):
 
 	def print_metrics(self):
 		start=datetime.now()
-		end=start-timedelta(minutes=120)
+		end=start-timedelta(minutes=15)
 
 		data={}
 		data['surfdata_wind_min']=self.server.get_value('wma',end,start,agg_min);
