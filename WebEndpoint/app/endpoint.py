@@ -219,7 +219,7 @@ class CustomHttpRequestHandler(PathBoundHttpRequestHandler):
 		data['surfdata_t_wasser']=self.server.get_value('xt',end,start,agg_max);
 		data['v_capacitor']=self.server.get_value('vc',end,start,agg_last);
 		data['v_battery']=self.server.get_value('xv',end,start,agg_last);
-		data['sun']=self.server.get_value('vs',end,start,agg_last);
+		data['v_solar']=self.server.get_value('vs',end,start,agg_last);
 
 		text=""
 		for (k,v) in data.items():
@@ -272,6 +272,9 @@ class CustomHttpRequestHandler(PathBoundHttpRequestHandler):
 			t_wasser=num(self.server.get_value('xt',t120,now,agg_last)),
 			wind_avg=num(self.server.get_value('wav',t30,now,agg_min),0),
 			wind_max=num(self.server.get_value('wma',t30,now,agg_max),0),
+			v_solar=num(self.server.get_value('vs',t30,now,agg_min),1),
+			v_capacitor=num(self.server.get_value('vc',t30,now,agg_min),1),
+			v_battery=num(self.server.get_value('xv',t30,now,agg_min),1),
 			wind_dir=wind_dir,
 			wind_dir_name=wdir(wind_dir),
 			chartdata=json.dumps(chartdata)
