@@ -26,6 +26,12 @@ RFM69W (https://www.mikrocontroller.net/articles/RFM69)
 
 SIM800L (https://nettigo.eu/products/sim800l-gsm-grps-module)
 
+### 433 MHz Empfänger
+
+* Optional für zusätzlichen Temperatursensor
+* Besseres Modul mit SYN470R Chip
+* Außenantenne
+
 ### Sonstiges
 
 * Lochrasterplatine
@@ -53,11 +59,23 @@ SIM800L (https://nettigo.eu/products/sim800l-gsm-grps-module)
 
 Zusätzlich muss am ANT eine passende Antenne angeschlossen werden (17,3 cm Klingeldraht, auf einem Stift aufgerollt, dass er etwas kompakter ist). Ohne die Antenne beträgt die Empfangsreichweite nur wenige Meter!
 
-
-
 ### GSM-Modem
 
 * Mittels der Diode wird die Spannung auf ~4V reduziert, dies dient als Eingangsspannung für das GSM-Modul
+* Das Modem wird an den seriellen Port 2 (Pins A2, A3) angeschlossen
+* An Pin A1 wird über einen Transistor der Reset-Pin des Modems angeschlossen. Ein Pullup-Widerstand sorgt dafür, dass Reset auf HIGH ist. Über A1 kann es auf LOW gezogen und damit ein Reset ausgelöst werden.
+
+| GSM800      | STM32F103C8 |
+| ----------- | ----------- |
+| GND         | GND         |
+| RX          | A2          |
+| TX          | A3          |
+
+### 433 MHz-Empfänger
+
+* Data an B8
+* GND an GND
+* VCC an 3.3V
 
 # Software
 

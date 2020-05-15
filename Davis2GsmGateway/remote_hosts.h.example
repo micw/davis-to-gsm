@@ -1,0 +1,8 @@
+// Rename to remote_hosts.h and change to your needs
+#define REMOTE_USE_HTTPS
+#define REMOTE_PORT1 443
+#define REMOTE_SERVER1 "host1.example.com"
+#define REMOTE_URI1 "/endpoint?api_key=12345"
+#define REMOTE_PORT2 443
+#define REMOTE_SERVER2 "host2.example.com"
+#define REMOTE_URI2 "/other-endpoint"
